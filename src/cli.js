@@ -1,10 +1,8 @@
-//IIFE so we can can use async await in older node versions
 async function cli(args) {
   const commander = require("commander");
   const util = require("util");
   const cbGlob = require("glob");
   const fs = require("fs/promises");
-
   const path = require("path");
   const { spawn } = require("child_process");
   const invariant = (cond, msg) => {
@@ -14,7 +12,6 @@ async function cli(args) {
   };
 
   const glob = util.promisify(cbGlob);
-
   const parsePkgJson = (pkgDir) => {
     const filePath = path.resolve(pkgDir, "package.json");
     return fs
@@ -23,28 +20,28 @@ async function cli(args) {
   };
 
   const program = new commander.Command();
-  program.version("0.0.1");
   program
     .requiredOption(
-      "-e --exclude <excludePkg>",
-      "comma separated list of excluded package dirnames."
-    )
-    .option(
-      "--modify",
-      "leave yarn.lock and package.json modifications in place. May be useful in a CI environment where yarn install is run multiple times."
+      "-e --exclude <excluded packages>",
+      "Comma separated list of excluded package dirnames. (Required)"
     )
     .option(
       "--cwd <directory>",
-      "workspace root directory. Defaults to the current working directory.",
-      process.cwd()
+      "workspace root directory. (Default: current working directory)"
     )
+    .option(
+      "--modify",
+      "Leave yarn.lock and package.json modifications in place after the operation completes. May be useful in a CI environment where yarn install is run multiple times."
+    );
 
-    //TODO(leo): vvv
-    .allowUnknownOption(true); //for reg. yarn options
+  program.version("0.0.1");
+
+  //TODO(leo): test more
+  // .allowUnknownOption(true); //for reg. yarn options
 
   program.parse(args);
-  const { cwd, exclude, modify } = program.opts();
-
+  const { cwd: baseCwd, exclude, modify } = program.opts();
+  const cwd = baseCwd || process.cwd();
   const excludes = exclude.split(",");
 
   const resolveWith = (p) => path.resolve(cwd, p);
@@ -57,7 +54,7 @@ async function cli(args) {
   const tmpYarnLockPath = path.resolve(tmpDir, "yarn.lock");
 
   const packageJson = await parsePkgJson(cwd);
-  console.log("yes", packageJson);
+
   invariant(
     !!packageJson.workspaces,
     `No 'workspaces' entry was found in package.json.`
@@ -67,12 +64,10 @@ async function cli(args) {
     ? { packages: packageJson.workspaces, nohoist: [] }
     : packageJson.workspaces;
   const packagesArr = normalizedOrigWorkspacesVal.packages;
-  console.log("yes2", packageJson);
 
   const packageDirs = (
     await Promise.all(packagesArr.map(resolveWith).map((pkg) => glob(pkg, {})))
   ).flat();
-  console.log("yes3", packageJson);
 
   invariant(!!packageDirs.length, `No packages found.`);
   const filtered = packageDirs
@@ -83,13 +78,8 @@ async function cli(args) {
     workspaces: { ...normalizedOrigWorkspacesVal, packages: filtered },
   };
 
-  console.log("tmp", updatedPackageJson);
-  console.log("tmp", tmpDir);
-  //TODO(leo): idea- dstructive operation safe rollback pkg for file work w Node?
-
   await Promise.all([
     fs.copyFile(pkgJsonPath, tmpPackageJsonPath),
-    //TODO(leo): revert below
 
     fs.copyFile(yarnLockPath, tmpYarnLockPath),
   ]);
@@ -97,7 +87,7 @@ async function cli(args) {
   const restoreFiles = async () => {
     await Promise.all([
       fs.copyFile(tmpPackageJsonPath, pkgJsonPath),
-      //TODO(leo): revert below
+
       fs.copyFile(tmpYarnLockPath, yarnLockPath),
     ]);
 
@@ -111,8 +101,11 @@ async function cli(args) {
       JSON.stringify(updatedPackageJson, null, 2)
     );
 
-    //TODO(leo): vvv rm force
-    console.log(process.cwd());
+    console.log(
+      "Running yarn install with the following package exclusions:",
+      excludes.join(" ")
+    );
+
     const yarnProcess = spawn(
       "yarn",
       [
@@ -120,7 +113,8 @@ async function cli(args) {
         !modify && "--frozen-lockfile",
         "--cwd",
         cwd,
-        ...program.args.filter((a) => a !== "--frozen-lockfile"),
+        //TODO(leo): vvv test more
+        //    ...program.args.filter((a) => a !== "--frozen-lockfile"),
       ].filter((x) => x),
       {
         stdio: "inherit",
@@ -128,25 +122,21 @@ async function cli(args) {
     );
 
     yarnProcess.on("exit", function (code) {
-      console.log("success.");
+      console.log("Install successful.");
       if (!modify) {
         restoreFiles();
       }
 
-      console.log("child process exited with code " + code.toString());
+      if (code === 1) {
+        throw new Error("Error occurred in yarn process.");
+      }
     });
   } catch (e) {
     console.error(e);
-    console.log("restoring files");
 
     await restoreFiles();
     throw e;
   }
-
-  //make new pkg json
-  //run yarn
-  //pass other ops?
-  //handle --cwd
 }
 
 module.exports = cli;
