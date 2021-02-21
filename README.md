@@ -71,6 +71,7 @@ current working directory)
 
 ### Caveats
 
-- Passing additional CLI options to the underlying `yarn install` is not currently supported.
-- `yarn-exclude` will not check if the excluded workspace is actually depended upon or not by any of the included ones; you'll have to make sure of that yourself before running this.
-- It's important to emphasize that this package doesn't do anything sophisticated- it simply removes the specified packages from `workspaces` in package.json, runs `yarn install`, and restores package.json and yarn.lock to their original forms. If you're concerned by any implications of that, I'd recommend not using this library, or doing test runs with the `--modify` option and observing the output to make sure you fully understand the effects. For example, in some cases exact versions of yarn.lock entries may change (however, this is also true of regular `yarn install` if you aren't using `--frozen-lockfile` with it.)
+* Passing additional CLI options to the underlying `yarn install` is not currently supported.
+* `yarn-exclude` will not check if the excluded workspace is actually depended upon or not by any of the included ones; you'll have to make sure of that yourself before running this.
+* This package doesn't do anything fancy- it simply removes the specified packages from `workspaces` in package.json, runs `yarn install`, and restores package.json and yarn.lock to their original forms.
+* If you're concerned by any implications of the above, I'd recommend either not using this library, or doing test runs with the `--modify` option and observing the output to make sure you fully understand the effects. For example, in some cases exact versions of yarn.lock entries may change (however, this is also true of regular `yarn install` if you aren't using `--frozen-lockfile` with it.)
