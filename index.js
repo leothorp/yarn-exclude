@@ -1,6 +1,6 @@
 (async function () {
   const commander = require("commander");
-
+const util = require('util')
   const cbGlob = require("glob");
   const fs = require("fs/promises");
 
@@ -12,33 +12,7 @@
     }
   };
 
-  //own implementation, to handle nonstandard structure of exec
-  const toPromise = (fn) => {
-    const wrappedFn = (...args) => {
-      return new Promise((res, rej) => {
-        console.log("prom", "in", ...args);
-
-        fn.call(null, ...args, (err, ...resultArgs) => {
-          console.log("cb");
-
-          if (err) {
-            console.error("err", err);
-            rej(err);
-            return;
-          }
-          console.log("prom", resultArgs);
-
-          if (resultArgs.length > 1) {
-            res(resultArgs);
-          } else {
-            res(resultArgs[0]);
-          }
-        });
-      });
-    };
-    return wrappedFn;
-  };
-  const glob = toPromise(cbGlob);
+  const glob = util.promisify(cbGlob)
 
   const parsePkgJson = (pkgDir) => {
     const filePath = path.resolve(pkgDir, "package.json");
