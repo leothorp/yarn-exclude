@@ -96,7 +96,7 @@ async function cli(args) {
 
       fs.copyFile(tmpYarnLockPath, yarnLockPath),
     ]);
-    // await rmTmp();
+    await rmTmp();
   };
 
   try {
