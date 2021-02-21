@@ -1,6 +1,7 @@
-(async function () {
+//IIFE so we can can use async await in older node versions
+async function cli(args) {
   const commander = require("commander");
-const util = require('util')
+  const util = require("util");
   const cbGlob = require("glob");
   const fs = require("fs/promises");
 
@@ -12,7 +13,7 @@ const util = require('util')
     }
   };
 
-  const glob = util.promisify(cbGlob)
+  const glob = util.promisify(cbGlob);
 
   const parsePkgJson = (pkgDir) => {
     const filePath = path.resolve(pkgDir, "package.json");
@@ -24,17 +25,24 @@ const util = require('util')
   const program = new commander.Command();
   program.version("0.0.1");
   program
-    .requiredOption("-e --exclude <excludePkg>", "excluded package")
+    .requiredOption(
+      "-e --exclude <excludePkg>",
+      "comma separated list of excluded package dirnames."
+    )
     .option(
       "--modify",
       "leave yarn.lock and package.json modifications in place. May be useful in a CI environment where yarn install is run multiple times."
     )
-    .option("--cwd <directory>", "workspace root directory", process.cwd())
+    .option(
+      "--cwd <directory>",
+      "workspace root directory. Defaults to the current working directory.",
+      process.cwd()
+    )
 
     //TODO(leo): vvv
     .allowUnknownOption(true); //for reg. yarn options
 
-  program.parse(process.argv);
+  program.parse(args);
   const { cwd, exclude, modify } = program.opts();
 
   const excludes = exclude.split(",");
@@ -139,4 +147,6 @@ const util = require('util')
   //run yarn
   //pass other ops?
   //handle --cwd
-})();
+}
+
+module.exports = cli;

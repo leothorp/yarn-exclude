@@ -1,12 +1,24 @@
 {
   "name": "yarn-exclude",
   "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
+  "description": "Exclude a workspace from yarn install in a yarn monorepo.",
+  "main": "src/index.js",
+  "bin": "./bin/yarn-exclude",
+  
+  "keywords": [
+    "yarn",
+    "monorepo",
+    "exclude",
+    "workspace",
+    "package"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./index.js --cwd ../test-mono -e three --modify",
     "test-run": "yarn cache clean && rm -rf ../test-mono/node_modules && node ./index.js --cwd ../test-mono -e three --modify"
+  },
+  "engines": {
+    "node": ">=10"
   },
   "author": "",
   "license": "MIT",
