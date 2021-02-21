@@ -34,7 +34,7 @@ async function cli(args) {
       "Leave yarn.lock and package.json modifications in place after the operation completes. May be useful in a CI environment where yarn install is run multiple times."
     );
 
-  program.version("0.0.1");
+  program.version(process.env.npm_package_version);
 
   //TODO(leo): test more
   // .allowUnknownOption(true); //for reg. yarn options
