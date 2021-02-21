@@ -1,0 +1,17 @@
+{
+  "name": "yarn-exclude",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js -d ../test-mono -e three",
+    "test-run": "rm -rf ../test-mono/node_modules && node index.js -d ../test-mono"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^7.1.0",
+    "glob": "^7.1.6"
+  }
+}
