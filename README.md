@@ -41,8 +41,7 @@ The result is equivalent to having a `workspaces` config of:
 
 and running `yarn install`.
 
-Glob and array notation for `workspaces` will also work,
-for example:
+Glob and array notation for `workspaces` will also work.
 
 ```
   "workspaces": [
