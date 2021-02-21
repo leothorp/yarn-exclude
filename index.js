@@ -46,6 +46,9 @@
   console.log(program.opts());
   const resolveWith = (p) => path.resolve(dir, p);
 
+  const pkgJsonPath = resolveWith("package.json");
+  const tmpPkgJsonPath = path.resolve(".", "temp-package.json");
+
   const packageJson = await parsePkgJson(dir);
 
   invariant(
@@ -72,7 +75,11 @@
     workspaces: { ...normalizedOrigWorkspacesVal, packages: filtered },
   };
 
-console.log("tmp", tmpPackageJson);
+  console.log("tmp", tmpPackageJson);
+
+  await fs.writeFile(path, JSON.stringify(tmpPackageJson), {
+    encoding: "utf8",
+  });
 
   //make new pkg json
   //run yarn
