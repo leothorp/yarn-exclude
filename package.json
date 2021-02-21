@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./index.js --cwd ../test-mono -e three --modify",
-    "test-run": "yarn cache clean && rm -rf ../test-mono/node_modules && cd ../test-mono && node ./index.js --cwd ../test-mono -e three"
+    "test-run": "yarn cache clean && rm -rf ../test-mono/node_modules && node ./index.js --cwd ../test-mono -e three --modify"
   },
   "author": "",
   "license": "MIT",

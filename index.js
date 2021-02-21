@@ -51,7 +51,7 @@
   program.version("0.0.1");
   program
     .requiredOption("-e --exclude <excludePkg>", "excluded package")
-    .requiredOption(
+    .option(
       "--modify",
       "leave yarn.lock and package.json modifications in place. May be useful in a CI environment where yarn install is run multiple times."
     )
@@ -61,9 +61,9 @@
     .allowUnknownOption(true); //for reg. yarn options
 
   program.parse(process.argv);
-  const { dir, exclude, modify } = program.opts();
+  const { cwd, exclude, modify } = program.opts();
 
-  const resolveWith = (p) => path.resolve(dir, p);
+  const resolveWith = (p) => path.resolve(cwd, p);
 
   const pkgJsonPath = resolveWith("package.json");
   console.log(pkgJsonPath);
@@ -72,7 +72,7 @@
   const tmpPackageJsonPath = path.resolve(tmpDir, "package.json");
   const tmpYarnLockPath = path.resolve(tmpDir, "yarn.lock");
 
-  const packageJson = await parsePkgJson(dir);
+  const packageJson = await parsePkgJson(cwd);
   console.log("yes", packageJson);
   invariant(
     !!packageJson.workspaces,
@@ -94,7 +94,7 @@
 
   const filtered = packageDirs
     .filter((w) => w !== exclude && path.basename(w) !== exclude)
-    .map((p) => path.relative(dir, p));
+    .map((p) => path.relative(cwd, p));
   const updatedPackageJson = {
     ...packageJson,
     workspaces: { ...normalizedOrigWorkspacesVal, packages: filtered },
@@ -136,7 +136,7 @@
         "install",
         !modify && "--frozen-lockfile",
         "--cwd",
-        dir,
+        cwd,
         ...program.args.filter((a) => a !== "--frozen-lockfile"),
       ].filter((x) => x),
       {
