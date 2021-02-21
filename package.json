@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js -d ../test-mono -e three",
-    "test-run": "rm -rf ../test-mono/node_modules && node index.js -d ../test-mono"
+    "start": "node ./index.js --cwd ../test-mono -e three --modify",
+    "test-run": "yarn cache clean && rm -rf ../test-mono/node_modules && cd ../test-mono && node ./index.js --cwd ../test-mono -e three"
   },
   "author": "",
   "license": "MIT",
