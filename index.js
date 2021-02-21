@@ -1,11 +1,11 @@
 (async function () {
   const commander = require("commander");
-  const util = require("util");
+
   const cbGlob = require("glob");
   const fs = require("fs/promises");
-  const fs2 = require("fs");
+
   const path = require("path");
-  const { exec: cbExec, spawn } = require("child_process");
+  const { spawn } = require("child_process");
   const invariant = (cond, msg) => {
     if (!cond) {
       throw new Error(msg);
@@ -63,6 +63,8 @@
   program.parse(process.argv);
   const { cwd, exclude, modify } = program.opts();
 
+  const excludes = exclude.split(",");
+
   const resolveWith = (p) => path.resolve(cwd, p);
 
   const pkgJsonPath = resolveWith("package.json");
@@ -91,9 +93,8 @@
   console.log("yes3", packageJson);
 
   invariant(!!packageDirs.length, `No packages found.`);
-
   const filtered = packageDirs
-    .filter((w) => w !== exclude && path.basename(w) !== exclude)
+    .filter((w) => !excludes.includes(path.basename(w)))
     .map((p) => path.relative(cwd, p));
   const updatedPackageJson = {
     ...packageJson,
