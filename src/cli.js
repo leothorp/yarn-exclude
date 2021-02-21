@@ -112,9 +112,6 @@ async function cli(args) {
       "Running yarn install with the following package exclusions:",
       excludes.join(" ")
     );
-    const echoProc = spawn("printenv", {
-      stdio: "inherit",
-    });
 
     const yarnProcess = spawn(
       "yarn",
@@ -143,6 +140,7 @@ async function cli(args) {
       } else {
         rmTmp();
       }
+
     });
   } catch (e) {
     console.error(e);
