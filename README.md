@@ -2,7 +2,10 @@
 
 ### Overview
 
-This library is intended mainly for deploying a single package in a yarn monorepo to a CI environment, (which will often run yarn install from the monorepo root), without needing to install all dependencies from unused sibling packages. This is done by temporarily modifying package.json to only contain the non-excluded workspaces before running `yarn install` (essentially simulating what would happen if the excluded packages were never present). It will not check if the excluded workspace is actually depended upon or not by the included ones; you'll want to make sure of that before using this.
+This library provides a way to exclude packages in a yarn monorepo when running `yarn install`, only installing dependencies for the desired workspaces. The main intended use case is for easily deploying a single workspace to a CI environment, without the overhead of dependencies from all sibling packages being installed.
+
+This is accomplished by temporarily modifying package.json to only contain the non-excluded workspaces before running `yarn install` (essentially simulating what would happen if the excluded packages were never present in the first place). 
+
 
 ### Usage
 
@@ -64,4 +67,5 @@ current working directory)
 ### Caveats
 
 - Passing additional CLI options to the underlying `yarn install` is not currently supported.
-- It's important to emphasize that this package doesn't do anything especially clever- it simply removes the specified packages from `workspaces` in package.json, runs `yarn install`, and restores package.json and yarn.lock to their original forms. If you're concerned by any implications of that, I'd recommend not using this library, or doing test runs with the `--modify` option and observing the output to make sure you fully understand the effects. For example, in some cases exact versions of yarn.lock entries may change (however, this is also true of regular `yarn install` if you aren't using `--frozen-lockfile` with it.)
+- `yarn-exclude` will not check if the excluded workspace is actually depended upon or not by any of the included ones; you'll have to make sure of that yourself before running this.
+- It's important to emphasize that this package doesn't do anything sophisticated- it simply removes the specified packages from `workspaces` in package.json, runs `yarn install`, and restores package.json and yarn.lock to their original forms. If you're concerned by any implications of that, I'd recommend not using this library, or doing test runs with the `--modify` option and observing the output to make sure you fully understand the effects. For example, in some cases exact versions of yarn.lock entries may change (however, this is also true of regular `yarn install` if you aren't using `--frozen-lockfile` with it.)
