@@ -7,9 +7,11 @@ This library provides a way to exclude packages in a yarn monorepo when running 
 This is accomplished by temporarily modifying package.json to only contain the non-excluded workspaces before running `yarn install` (essentially simulating what would happen if the excluded packages were never present in the first place). 
 
 
+
+
 ### Usage
 
-If we have following `workspaces` config:
+If we have the following `workspaces` config:
 
 ```
   "workspaces": {
@@ -49,6 +51,8 @@ Glob and array notation for `workspaces` will also work.
   },
 ```
 
+
+
 ### Options
 
 `-e --exclude <excluded packages>` Comma separated list of excluded package
@@ -62,6 +66,8 @@ current working directory)
 `-V, --version` output the version number
 
 `-h, --help` display help for command options
+
+
 
 ### Caveats
 
