@@ -14,14 +14,12 @@
     "package"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./index.js --cwd ../test-mono --exclude three --modify",
-    "test-run": "yarn cache clean && rm -rf ../test-mono/node_modules && node ./index.js --cwd ../test-mono --exclude three --modify"
+    "test": "yarn cache clean && rm -rf ../test-mono/node_modules && node ./index.js --cwd ../test-mono --exclude three --modify"
   },
   "engines": {
     "node": ">=10"
   },
-  "author": "",
+  "author": "leothorp",
   "license": "MIT",
   "dependencies": {
     "commander": "^7.1.0",
