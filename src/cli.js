@@ -53,7 +53,7 @@ async function cli(args) {
 
   const pkgJsonPath = resolveWith("package.json");
   const yarnLockPath = resolveWith("yarn.lock");
-  const tmpDir = await fs.mkdtemp("yarn-exclude-tmp");
+  const tmpDir = await fs.mkdtemp(path.join(__dirname,  "../tmp", "yarn-exclude-tmp"));
   const tmpPackageJsonPath = path.resolve(tmpDir, "package.json");
   const tmpYarnLockPath = path.resolve(tmpDir, "yarn.lock");
 
@@ -88,14 +88,15 @@ async function cli(args) {
     fs.copyFile(yarnLockPath, tmpYarnLockPath),
   ]);
 
+  const rmTmp = () => fs.rmdir(tmpDir, { recursive: true });
+
   const restoreFiles = async () => {
     await Promise.all([
       fs.copyFile(tmpPackageJsonPath, pkgJsonPath),
 
       fs.copyFile(tmpYarnLockPath, yarnLockPath),
     ]);
-
-    await fs.rmdir(tmpDir, { recursive: true });
+    // await rmTmp();
   };
 
   try {
@@ -127,13 +128,15 @@ async function cli(args) {
     );
 
     yarnProcess.on("exit", function (code) {
+      if (code === 1) {
+        //TODO(leo): vvv evaluate err cases more
+        throw new Error("Error occurred in yarn process.");
+      }
       console.log("Yarn install successful.");
       if (!modify) {
         restoreFiles();
-      }
-
-      if (code === 1) {
-        throw new Error("Error occurred in yarn process.");
+      } else {
+        rmTmp();
       }
     });
   } catch (e) {
