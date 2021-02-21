@@ -5,10 +5,15 @@ async function cli(args) {
   const fs = require("fs/promises");
   const path = require("path");
   const { spawn } = require("child_process");
+  const { version } = require("../package.json");
   const invariant = (cond, msg) => {
     if (!cond) {
       throw new Error(msg);
     }
+  };
+
+  const features = {
+    argForwarding: false, //TODO(leo): test more before re-enabling
   };
 
   const glob = util.promisify(cbGlob);
@@ -31,13 +36,13 @@ async function cli(args) {
     )
     .option(
       "--modify",
-      "Leave yarn.lock and package.json modifications in place after the operation completes. May be useful in a CI environment where yarn install is run multiple times."
+      "Leave yarn.lock and package.json modifications in place after the operation completes. May be useful in some CI environments."
     );
+  if (features.argForwarding) {
+    program.allowUnknownOption(true); //for reg. yarn options
+  }
 
-  program.version(process.env.npm_package_version);
-
-  //TODO(leo): test more
-  // .allowUnknownOption(true); //for reg. yarn options
+  program.version(version);
 
   program.parse(args);
   const { cwd: baseCwd, exclude, modify } = program.opts();
@@ -47,7 +52,6 @@ async function cli(args) {
   const resolveWith = (p) => path.resolve(cwd, p);
 
   const pkgJsonPath = resolveWith("package.json");
-  console.log(pkgJsonPath);
   const yarnLockPath = resolveWith("yarn.lock");
   const tmpDir = await fs.mkdtemp("yarn-exclude-tmp");
   const tmpPackageJsonPath = path.resolve(tmpDir, "package.json");
@@ -113,8 +117,9 @@ async function cli(args) {
         !modify && "--frozen-lockfile",
         "--cwd",
         cwd,
-        //TODO(leo): vvv test more
-        //    ...program.args.filter((a) => a !== "--frozen-lockfile"),
+        ...(features.argForwarding
+          ? program.args.filter((a) => a !== "--frozen-lockfile")
+          : []),
       ].filter((x) => x),
       {
         stdio: "inherit",
@@ -122,7 +127,7 @@ async function cli(args) {
     );
 
     yarnProcess.on("exit", function (code) {
-      console.log("Install successful.");
+      console.log("Yarn install successful.");
       if (!modify) {
         restoreFiles();
       }

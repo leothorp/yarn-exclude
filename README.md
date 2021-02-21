@@ -58,7 +58,7 @@ dirnames. (Required)
 `--cwd <directory>` workspace root directory. (Default:
 current working directory)
 
-`--modify` Leave yarn.lock and package.json modifications in place after the operation completes. May be useful in some CI environments (e.g., if yarn install is run a second time later on.)
+`--modify` Leave yarn.lock and package.json modifications in place after the operation completes. May be useful in some CI environments.
 
 `-V, --version` output the version number
 
