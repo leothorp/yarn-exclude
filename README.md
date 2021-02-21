@@ -27,7 +27,8 @@ If we have the following `workspaces` config:
 And we run:
 
 ```
-npx yarn-exclude -e one,two
+//bypass interactive prompt for CI
+npm_config_yes=true npx yarn-exclude -e one,two
 ```
 
 The result is equivalent to having a `workspaces` config of:
