@@ -2,7 +2,7 @@ async function cli(args) {
   const commander = require("commander");
   const util = require("util");
   const cbGlob = require("glob");
-  const fs = require("fs/promises");
+  const fs = require("fs").promises;
   const path = require("path");
   const { spawn } = require("child_process");
   const { version } = require("../package.json");
