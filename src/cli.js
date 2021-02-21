@@ -53,7 +53,7 @@ async function cli(args) {
 
   const pkgJsonPath = resolveWith("package.json");
   const yarnLockPath = resolveWith("yarn.lock");
-  const tmpDir = await fs.mkdtemp(path.join(__dirname,  "../tmp", "yarn-exclude-tmp"));
+  const tmpDir = await fs.mkdtemp(path.join(__dirname,  "yarn-exclude-tmp"));
   const tmpPackageJsonPath = path.resolve(tmpDir, "package.json");
   const tmpYarnLockPath = path.resolve(tmpDir, "yarn.lock");
 
