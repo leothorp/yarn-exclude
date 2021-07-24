@@ -2,7 +2,7 @@
 
 ### Overview
 
-This library provides a way to exclude packages in a yarn monorepo when running `yarn install`, only installing dependencies for the desired workspaces. The main intended use case is for easily deploying a single workspace to a CI environment, without the overhead of dependencies from all sibling packages being installed.
+This library provides a way to exclude packages in a yarn monorepo when running `yarn install`, only installing dependencies for the desired workspaces. The main intended use case is for easily deploying a single workspace to a CI environment.
 
 This is accomplished by temporarily modifying package.json to only contain the non-excluded workspaces before running `yarn install` (essentially simulating what would happen if the excluded packages were never present in the first place). 
 
