@@ -66,7 +66,7 @@ Glob and array notation for `workspaces` will also work.
 
 
 
-### Options
+### CLI Options
 
 `-e --exclude <excluded packages>` Comma separated list of excluded package
 dirnames. (Required)
