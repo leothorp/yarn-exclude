@@ -1,4 +1,5 @@
 # yarn-exclude
+Tool for excluding specific workspaces when installing project packages in a yarn 1 monorepo.
 
 ### Installation
 
