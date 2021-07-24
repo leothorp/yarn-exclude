@@ -1,11 +1,22 @@
 # yarn-exclude
 
+### Installation
+
+```
+  npm i -g yarn-exclude
+``` 
+  or to just start using without the global install:
+```
+  npx yarn-exclude --exclude package-name
+``` 
+
+
+
 ### Overview
 
 This library provides a way to exclude packages in a yarn monorepo when running `yarn install`, only installing dependencies for the desired workspaces. The main intended use case is for easily deploying a single workspace to a CI environment.
 
 This is accomplished by temporarily modifying package.json to only contain the non-excluded workspaces before running `yarn install` (essentially simulating what would happen if the excluded packages were never present in the first place). 
-
 
 
 
@@ -28,7 +39,7 @@ And we run:
 
 ```
 //bypass interactive prompt for CI
-NPM_CONFIG_YES=true npx yarn-exclude -e one,two
+NPM_CONFIG_YES=true npx yarn-exclude --exclude one,two
 ```
 
 The result is equivalent to having a `workspaces` config of:
