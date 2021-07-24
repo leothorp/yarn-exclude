@@ -14,6 +14,7 @@
     "package"
   ],
   "scripts": {
+    "publish": "bash ./scripts/publish.sh",
     "test": "yarn cache clean && rm -rf ../test-mono/node_modules && node ./index.js --cwd ../test-mono --exclude three --modify"
   },
   "engines": {
