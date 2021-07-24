@@ -18,7 +18,7 @@
     "package"
   ],
   "scripts": {
-    "publish": "./scripts/publish.sh patch",
+    "patch-version": "./scripts/publish.sh patch",
     "test": "yarn cache clean && rm -rf ../test-mono/node_modules && node ./index.js --cwd ../test-mono --exclude three --modify"
   },
   "engines": {
