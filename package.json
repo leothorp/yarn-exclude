@@ -1,6 +1,6 @@
 {
   "name": "yarn-exclude",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Exclude a workspace from yarn install in a yarn monorepo.",
   "main": "src/cli.js",
   "bin": {
