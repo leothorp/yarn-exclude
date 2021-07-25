@@ -2,7 +2,7 @@
   "name": "yarn-exclude",
   "version": "0.0.24",
   "description": "Exclude a workspace from yarn install in a yarn monorepo.",
-  "main": "src/cli.js",
+  "main": "src/index.js",
   "bin": {
     "yarn-exclude": "bin/yarn-exclude.js"
   },
@@ -19,7 +19,7 @@
   ],
   "scripts": {
     "patch-version": "./scripts/publish.sh patch",
-    "test": "yarn cache clean && rm -rf ../test-mono/node_modules && node ./index.js --cwd ../test-mono --exclude three --modify"
+     "test": "node ./test/exclude.test.js"
   },
   "engines": {
     "node": ">=10"
@@ -29,5 +29,8 @@
   "dependencies": {
     "commander": "^7.1.0",
     "glob": "^7.1.6"
+  },
+  "devDependencies": {
+    "shelljs": "^0.8.4"
   }
 }
