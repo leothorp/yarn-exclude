@@ -1,3 +1,4 @@
 node_modules
 yarn-exclude-tmp*
 test-monorepo/
+.DS_Store
