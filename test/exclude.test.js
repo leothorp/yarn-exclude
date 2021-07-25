@@ -13,34 +13,27 @@ const getConfigFiles = () => {
 
 const checkStrPresence = (shouldBePresent) => {
   const { pkgJson, yarnLock } = getConfigFiles();
-  console.log()
-  assert(pkgJson.includes("packages/three") && shouldBePresent);
-  assert(yarnLock.includes("react") && shouldBePresent);
+  const arePresent =
+    pkgJson.includes("packages/three") && yarnLock.includes("react");
+  assert(arePresent === shouldBePresent);
+  assert(arePresent === shouldBePresent);
 };
 
 const execPromise = (cmd) => {
-  console.log('yes')
 
   return new Promise((res, rej) => {
-  console.log('in')
 
-    shell.exec(
-      cmd,
-      { },
-      (exitCode, stdout, stderr) => {
-  console.log('postex', stderr)
+    shell.exec(cmd, {}, (exitCode, stdout, stderr) => {
 
-        if (exitCode !== 0) {
-        console.log('nozo');
+      if (exitCode !== 0) {
 
-          console.error(stderr);
-          rej();
-        }
-        console.log(stdout);
-
-        res();
+        console.error(stderr);
+        rej();
       }
-    );
+      console.log(stdout);
+
+      res();
+    });
   });
 };
 
