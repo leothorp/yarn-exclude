@@ -1,2 +1,3 @@
 node_modules
 yarn-exclude-tmp*
+test/test-monorepo/
