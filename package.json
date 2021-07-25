@@ -1,6 +1,6 @@
 {
   "name": "yarn-exclude",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "description": "Exclude a workspace from yarn install in a yarn monorepo.",
   "main": "src/index.js",
   "files": [
