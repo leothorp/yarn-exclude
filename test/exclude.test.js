@@ -19,12 +19,19 @@ const checkStrPresence = (shouldBePresent) => {
 
 const execPromise = (cmd) => {
   return new Promise((res, rej) => {
-    shell.exec(cmd, { shell: "#usr/bin/env bash" }, (exitCode) => {
-      if (exitCode !== 0) {
-        rej();
+    shell.exec(
+      cmd,
+      { shell: "#usr/bin/env bash" },
+      (exitCode, stdout, stdorr) => {
+        if (exitCode !== 0) {
+          console.error(stderr);
+          rej();
+        }
+        console.console.log(stdout);
+
+        res();
       }
-      res();
-    });
+    );
   });
 };
 
