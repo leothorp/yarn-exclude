@@ -28,7 +28,7 @@ async function cli(args) {
   program
     .requiredOption(
       "-e --exclude <excluded packages>",
-      "Comma separated list of excluded package dirnames. (Required)"
+      "Comma-separated list of excluded package dirnames. (Required)"
     )
     .option(
       "--cwd <directory>",
