@@ -1,6 +1,6 @@
 # yarn-exclude
 
-### \*\* N.B. - This package isn't actively maintained- it shouldn't be used for anything other than experimenting. \*\*
+## \*\* Note: This package isn't actively maintained- I wouldn't recommend using it for anything other than experimentation. \*\*
 
 Tool for excluding specific workspaces when installing project packages in a yarn 1 monorepo.
 
@@ -80,7 +80,5 @@ current working directory)
 `-h, --help` display help for command options
 
 ### Caveats
-
-*   This package isn't actively maintained- you probably shouldn't use it for anything other than experimenting.
 *   Passing additional CLI options to the underlying `yarn install` is not currently supported.
 *   `yarn-exclude` will not check if the excluded workspace is actually depended upon or not by any of the included ones; you'll have to make sure of that yourself before running this.
